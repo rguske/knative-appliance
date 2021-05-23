@@ -59,8 +59,8 @@ By putting `PACKER_LOG=1` in front of the `packer build` command in the `build.s
 
 ### Output directoy
 
-The finished build `ova` file will be exported to the `output-vmware-iso` directory.
+The finished build `ova` file will be exported to the `output-appliance-iso` directory.
 
 ## License
 
-VMware Event Broker Appliance is available under the BSD-2 license. Please see [LICENSE.txt](LICENSE.txt).
+WIP

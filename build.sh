@@ -16,7 +16,7 @@ if ! hash jq 2>/dev/null; then
     exit 1
 fi
 
-rm -f output-vmware-iso/*.ova
+rm -f output-appliance-iso/*.ova
 
 APPLIANCE_VERSION_FROM_BOM=$(jq -r < ${BOM_FILE} '.appliance.version')
 
