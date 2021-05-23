@@ -1,89 +1,65 @@
-# VMware Event Broker Appliance
+# WIP: Knative Appliance
 
 [![Photon OS 3.0](https://img.shields.io/badge/Photon%20OS-3.0-orange)](https://vmware.github.io/photon/)
-[![Published VMware Fling](https://img.shields.io/badge/VMware-Fling-green)](https://flings.vmware.com/vmware-event-broker-appliance)
-![Website](https://img.shields.io/website?label=vmweventbroker.io&url=https%3A%2F%2Fvmweventbroker.io%2F)
 
-![VMware Event Router
-Build](https://github.com/vmware-samples/vcenter-event-broker-appliance/workflows/VMware%20Event%20Router%20Development%20Build/badge.svg)
-![VMware Event Router Unit
-Tests](https://github.com/vmware-samples/vcenter-event-broker-appliance/workflows/VMware%20Event%20Router%20Unit%20Tests/badge.svg)
-![VMware Event Router Integration Tests](https://github.com/vmware-samples/vcenter-event-broker-appliance/workflows/VMware%20Event%20Router%20Integration%20Tests/badge.svg)
+[![Twitter Follow](https://img.shields.io/twitter/follow/vmw_rguske?style=social)](https://twitter.com/vmw_rguske)
+
+- [WIP: Knative Appliance](#wip-knative-appliance)
+  - [Credits](#credits)
+  - [Overview](#overview)
+  - [Build requirements](#build-requirements)
+  - [Built the Knative-Appliance](#built-the-knative-appliance)
+    - [Debugging](#debugging)
+    - [Output directoy](#output-directoy)
+  - [License](#license)
+
+## Credits
+
+All credits goes out to [Michael Gasch](https://twitter.com/embano1) and [William Lam](https://twitter.com/lamw) who are the maintainer of the awesome VMware Open Source project [VMware Event Broker Appliance](https://www.vmweventbroker.io). They developed this great way to build an VMware Photon OS based appliance in an automated fashion from scratch. I reused the code and stripped it down to the necessary bits and extended it for my needs.
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/lamw?style=social)](https://twitter.com/lamw)
 [![Twitter
 Follow](https://img.shields.io/twitter/follow/embano1?style=social)](https://twitter.com/embano1)
 
-
-<img src="logo/veba_otto_the_orca_320x320.png" align="right" height="320px"/>
-
-## Table of Contents
-
-- [VMware Event Broker Appliance](#vmware-event-broker-appliance)
-  - [Table of Contents](#table-of-contents)
-  - [Getting Started](#getting-started)
-  - [Overview](#overview)
-  - [Architecture](#architecture)
-  - [Getting in touch](#getting-in-touch)
-  - [Contributing](#contributing)
-  - [License](#license)
-
-
-## Getting Started
-
-Visit our website [vmweventbroker.io](https://vmweventbroker.io/) and explore our [documentation](https://vmweventbroker.io/kb) to get started quickly.
-
 ## Overview
 
-The [VMware Event Broker Appliance](https://flings.vmware.com/vmware-event-broker-appliance#summary) Fling enables customers to unlock the hidden potential of events in their SDDC to easily create [event-driven automation](https://octo.vmware.com/vsphere-power-event-driven-automation/) and take vCenter Server Events to the next level! Extending vSphere by easily triggering custom or prebuilt actions to deliver powerful integrations within your datacenter across public cloud has never been more easier before. A detailed list of use cases and possibilities with VMware Event Broker Appliance is available [here](https://vmweventbroker.io)
+This repository contains the necessary code to build the Knative-Appliance. The Knative-Appliance can be easily deployed on VMware's Desktop Hypervisor solutions Fusion (Mac/Linux) and Workstaion (Windows) as well as on vSphere. It will provide you a ready-to-go Knative `Serving` and `Eventing` environment.
 
-With this appliance, end-users, partners and independent software vendors only have to write minimal business logic without going through a steep learning curve understanding vSphere APIs. As such, we believe this solution not only offers a better user experience in solving existing problems for vSphere operators. More importantly, it will enable new integration use cases and workflows to grow the vSphere ecosystem and community, similar to what AWS has achieved with AWS Lambda.
+## Build requirements
 
-Learn more about the VMware Event Broker Appliance [here](https://vmweventbroker.io). 
+**CLI Tools:**
 
-Additional resources can be found [here](https://vmweventbroker.io) and some quick references are highlighted below
- - Watch [Michael Gasch](https://github.com/embano1) and [William Lam](https://github.com/lamw/) of VMware present a session at VMworld 2019 called ["If This Then That" for vSphere- The Power of Event-Driven Automation](https://videos.vmworld.com/global/2019/videoplayer/29523) (free VMworld account login is required to view).
- - Watch [Partheeban Kandasamy (PK)](https://github.com/embano1), [Michael Gasch](https://github.com/embano1) and [William Lam](https://github.com/lamw/) present about [Unlocking the potential of Events for SDDC automation](https://youtu.be/tOjp5_qn-Fg)
+- [VMware ovftool](https://www.vmware.com/support/developer/ovf/)
+- [Packer](https://learn.hashicorp.com/tutorials/packer/get-started-install-cli)
+- [jq](https://github.com/stedolan/jq/wiki/Installation)
+- [PowerShell](https://github.com/PowerShell/PowerShell) - more optional
 
-<!-- ## Users and Use Cases
+**Network:**
 
-Hear from the community on how they are taking advantage of the vCenter Server Appliance [here](https://vmweventbroker.io/casestudy-wip.md) -->
+- DHCP enabled
+- SSH enabled
+- No network restrictions between the build system (were `packer` is running on) and the VMware ESXi host.
+- Packer will create an http server serving `http_directory`
+  - Random port used within the range of 8000 and 9000
 
-## Architecture
+## Built the Knative-Appliance
 
-VMware Event Broker Appliance is provided as a Virtual Appliance that can be deployed to any vSphere-based infrastructure, including an on-premises and/or any public cloud environment, running on vSphere such as VMware Cloud on AWS or VMware Cloud on Dell-EMC.
+1. Clone the repository
+`git clone https://github.com/rguske/knative-appliance.git`
 
-The VMware Event Broker Appliance follows a highly modular approach, using Kubernetes and containers as an abstraction layer between the base operating system ([Photon OS](https://github.com/vmware/photon)) and the required application services. Currently the following components are used in the appliance:
+2. Change directoy
+`cd knative-appliance`
+3. Adjust the `photon-builder.json` file with the appropriate ESXi (Build host) data (IP, user, password, datastore, network)
+4. If you like to change the versions for Kubernetes or Knative, just modify them via the `bom.json`.
+5. Run the `build.sh` script
 
-- VMware Event Router ([Github](https://github.com/vmware-samples/vcenter-event-broker-appliance/vmware-event-router))
-  - Supported Event Stream Sources:
-    - VMware vCenter ([Website](https://www.vmware.com/products/vcenter-server.html))
-  - Supported Event Stream Processors: 
-    - Knative [Website](https://knative.dev/)
-    - OpenFaaS ([Website](https://www.openfaas.com/))
-    - AWS EventBridge ([Website](https://aws.amazon.com/eventbridge/))
-- Contour ([Github](https://github.com/projectcontour/contour))
-- Kubernetes ([Github](https://github.com/kubernetes/kubernetes))
-- Photon OS ([Github](https://github.com/vmware/photon))
+### Debugging
 
-<center><div style="height:250px;"><img src="docs/kb/img/veba-architecture.png"/></div></center>
+By putting `PACKER_LOG=1` in front of the `packer build` command in the `build.sh` script, it gives you a very detailed output during the build. Example: `PACKER_LOG=1 packer build -var "APPLIANCE_VERSION=${APPLIANCE_VERSION_FROM_BOM}" [...]` ).
 
-For more details about the individual components and how they are used in the VMware Event Broker Appliance, please see the [Architecture page](https://vmweventbroker.io/kb/architecture).
+### Output directoy
 
-## Getting in touch
-
-Feel free to reach out to [Team #VEBA](https://vmweventbroker.io/#team-veba) and the community 
-  - Email us at [dl-veba@vmware.com](mailto:dl-veba@vmware.com)
-  - Join our users on slack [#vcenter-event-broker-appliance](https://vmwarecode.slack.com/archives/CQLT9B5AA) which is part of the [VMware {Code}](https://code.vmware.com/web/code/join) Slack instance
-  - Follow for updates [@VMWEventBroker](https://twitter.com/VMWEventBroker)
-
-## Contributing
-
-The VMware Event Broker Appliance team welcomes contributions from the community.
-
-To help you get started making contributions to VMware Event Broker Appliance, we have collected some helpful best practices in the [Contributing guidelines](https://vmweventbroker.io/community#guidelines).
-
-Before submitting a pull request, please make sure that your change satisfies the requirements specified [here](https://vmweventbroker.io/community#pull-requests)
+The finished build `ova` file will be exported to the `output-vmware-iso` directory.
 
 ## License
 
