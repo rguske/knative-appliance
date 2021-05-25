@@ -42,6 +42,11 @@ This repository contains the necessary code to build the Knative-Appliance. The 
 - Packer will create an http server serving `http_directory`
   - Random port used within the range of 8000 and 9000
 
+**ESXi Version**
+
+- ESXi 6.7 or greater
+- ! All my tests failed with latest vSphere ESXi 7.0U2a !
+
 ## Built the Knative-Appliance
 
 1. Clone the repository
@@ -50,7 +55,7 @@ This repository contains the necessary code to build the Knative-Appliance. The 
 2. Change directoy
 `cd knative-appliance`
 3. Adjust the `photon-builder.json` file with the appropriate ESXi (Build host) data (IP, user, password, datastore, network)
-4. If you like to change the versions for Kubernetes or Knative, just modify them via the `bom.json`.
+4. If you like to change the versions for e.g. Kubernetes or Knative, just modify those via the `bom.json`.
 5. Run the `build.sh` script
 
 ### Debugging
@@ -59,7 +64,7 @@ By putting `PACKER_LOG=1` in front of the `packer build` command in the `build.s
 
 ### Output directoy
 
-The finished build `ova` file will be exported to the `output-appliance-iso` directory.
+The finished build `ova` file will be exported to the `output-vmware-iso` directory.
 
 ## License
 

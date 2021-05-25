@@ -2,7 +2,7 @@
 # Copyright 2019 VMware, Inc. All rights reserved.
 # SPDX-License-Identifier: BSD-2
 
-OUTPUT_PATH="../output-appliance-iso"
+OUTPUT_PATH="../output-vmware-iso"
 OVF_PATH=$(find ${OUTPUT_PATH} -type f -iname ${KNATIVE_APPLIANCE_NAME}.ovf -exec dirname "{}" \;)
 
 # Move ovf files in to a subdirectory of OUTPUT_PATH if not already

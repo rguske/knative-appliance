@@ -16,10 +16,10 @@ if ! hash jq 2>/dev/null; then
     exit 1
 fi
 
-rm -f output-appliance-iso/*.ova
+rm -f output-vmware-iso/*.ova
 
 APPLIANCE_VERSION_FROM_BOM=$(jq -r < ${BOM_FILE} '.appliance.version')
 
 echo "Building Knative Appliance OVA from ${APPLIANCE_VERSION_FROM_BOM} ..."
-packer build -var "APPLIANCE_VERSION=${APPLIANCE_VERSION_FROM_BOM}" -var-file=photon-builder.json -var-file=photon-version.json photon.json
+PACKER_LOG=1 packer build -var "APPLIANCE_VERSION=${APPLIANCE_VERSION_FROM_BOM}" -var-file=photon-builder.json -var-file=photon-version.json photon.json
 
